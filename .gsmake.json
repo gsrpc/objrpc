@@ -1,0 +1,20 @@
+{
+    "name":"github.com/gsrpc/objrpc",
+
+    "domain":"gslang",
+
+    "import" : [
+        {"name" : "github.com/gsrpc/gsrpc","domain":"task|gslang","version":"release/v1.0"}
+    ],
+
+
+    "properties":{
+        "gsrpc":{
+            "main":["github.com/gsrpc/gsrpc"]
+        },
+
+        "objrpc":{
+            "main":"./src"
+        }
+    }
+}
