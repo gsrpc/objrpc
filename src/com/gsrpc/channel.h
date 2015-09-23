@@ -9,20 +9,37 @@
 #ifndef COM_GSRPC_GSDOCKER_OBJC_NET_H
 #define COM_GSRPC_GSDOCKER_OBJC_NET_H
 
+#import <Foundation/Foundation.h>
+#import <com/gsrpc/future.h>
+
 @class GSRequest;
 @class GSResponse;
 
-@class GSFuture;
+
+
+@protocol GSCallback <NSObject>
+
+-(void) callback:(GSResponse*) response withErr:(NSError*) err;
+
+@end
+
 
 @protocol GSChannel <NSObject>
 
 @required
-- (GSFuture *)Send:(GSRequest *)call;
-
+- (void)Send:(GSRequest *)call withCallback:(id<GSCallback>) callback;
 @end
+
 
 @protocol GSDispatcher <NSObject>
+
+@property(readonly) UInt16 ID;
+
 - (GSResponse *)Dispatch:(GSRequest *)call;
+
 @end
+
+
+id<GSPromise> GSCreatePromise(id<GSChannel> channel,GSRequest* request,GSResolver resolver);
 
 #endif

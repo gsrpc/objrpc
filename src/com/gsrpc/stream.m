@@ -140,6 +140,10 @@
   return [self readBytesWithLength:length];
 }
 
+- (NSMutableData *)ReadArrayBytes:(UInt16) length {
+    return [self readBytesWithLength:length];
+}
+
 - (BOOL)ReadBool {
   Byte val = [self ReadByte];
 
@@ -228,6 +232,7 @@
   [self WriteByte:(UInt8)((val >> 48) & 0xff)];
 
   [self WriteByte:(UInt8)((val >> 56) & 0xff)];
+ 
 }
 
 - (void)WriteFloat32:(Float32)val {

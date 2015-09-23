@@ -36,6 +36,10 @@
 @required
 - (NSMutableData *)ReadBytes;
 
+
+@required
+- (NSMutableData *)ReadArrayBytes:(UInt16)length;
+
 @required
 - (BOOL)ReadBool;
 
