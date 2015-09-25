@@ -1,0 +1,275 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B6CFA0B81BB51B6700C5F163 /* future.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CFA0B31BB51B6700C5F163 /* future.m */; settings = {ASSET_TAGS = (); }; };
+		B6CFA0B91BB51B6700C5F163 /* gsrpc.gs.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CFA0B51BB51B6700C5F163 /* gsrpc.gs.m */; settings = {ASSET_TAGS = (); }; };
+		B6CFA0BA1BB51B6700C5F163 /* stream.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CFA0B71BB51B6700C5F163 /* stream.m */; settings = {ASSET_TAGS = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B6CFA0A11BB51B4500C5F163 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B6CFA0A31BB51B4500C5F163 /* libobjrpc-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libobjrpc-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6CFA0B11BB51B6700C5F163 /* channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = channel.h; sourceTree = "<group>"; };
+		B6CFA0B21BB51B6700C5F163 /* future.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = future.h; sourceTree = "<group>"; };
+		B6CFA0B31BB51B6700C5F163 /* future.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = future.m; sourceTree = "<group>"; };
+		B6CFA0B41BB51B6700C5F163 /* gsrpc.gs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gsrpc.gs.h; sourceTree = "<group>"; };
+		B6CFA0B51BB51B6700C5F163 /* gsrpc.gs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gsrpc.gs.m; sourceTree = "<group>"; };
+		B6CFA0B61BB51B6700C5F163 /* stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stream.h; sourceTree = "<group>"; };
+		B6CFA0B71BB51B6700C5F163 /* stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stream.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B6CFA0A01BB51B4500C5F163 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B6CFA09A1BB51B4500C5F163 = {
+			isa = PBXGroup;
+			children = (
+				B6CFA0AF1BB51B6700C5F163 /* com */,
+				B6CFA0A41BB51B4500C5F163 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B6CFA0A41BB51B4500C5F163 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B6CFA0A31BB51B4500C5F163 /* libobjrpc-ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B6CFA0AF1BB51B6700C5F163 /* com */ = {
+			isa = PBXGroup;
+			children = (
+				B6CFA0B01BB51B6700C5F163 /* gsrpc */,
+			);
+			name = com;
+			path = src/com;
+			sourceTree = "<group>";
+		};
+		B6CFA0B01BB51B6700C5F163 /* gsrpc */ = {
+			isa = PBXGroup;
+			children = (
+				B6CFA0B11BB51B6700C5F163 /* channel.h */,
+				B6CFA0B21BB51B6700C5F163 /* future.h */,
+				B6CFA0B31BB51B6700C5F163 /* future.m */,
+				B6CFA0B41BB51B6700C5F163 /* gsrpc.gs.h */,
+				B6CFA0B51BB51B6700C5F163 /* gsrpc.gs.m */,
+				B6CFA0B61BB51B6700C5F163 /* stream.h */,
+				B6CFA0B71BB51B6700C5F163 /* stream.m */,
+			);
+			path = gsrpc;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B6CFA0A21BB51B4500C5F163 /* objrpc-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B6CFA0AC1BB51B4500C5F163 /* Build configuration list for PBXNativeTarget "objrpc-ios" */;
+			buildPhases = (
+				B6CFA09F1BB51B4500C5F163 /* Sources */,
+				B6CFA0A01BB51B4500C5F163 /* Frameworks */,
+				B6CFA0A11BB51B4500C5F163 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "objrpc-ios";
+			productName = "objrpc-ios";
+			productReference = B6CFA0A31BB51B4500C5F163 /* libobjrpc-ios.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B6CFA09B1BB51B4500C5F163 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = gsrpc.com;
+				TargetAttributes = {
+					B6CFA0A21BB51B4500C5F163 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = B6CFA09E1BB51B4500C5F163 /* Build configuration list for PBXProject "objrpc-ios" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B6CFA09A1BB51B4500C5F163;
+			productRefGroup = B6CFA0A41BB51B4500C5F163 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B6CFA0A21BB51B4500C5F163 /* objrpc-ios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B6CFA09F1BB51B4500C5F163 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B6CFA0B91BB51B6700C5F163 /* gsrpc.gs.m in Sources */,
+				B6CFA0BA1BB51B6700C5F163 /* stream.m in Sources */,
+				B6CFA0B81BB51B6700C5F163 /* future.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B6CFA0AA1BB51B4500C5F163 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		B6CFA0AB1BB51B4500C5F163 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B6CFA0AD1BB51B4500C5F163 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = ./src;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		B6CFA0AE1BB51B4500C5F163 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = ./src;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B6CFA09E1BB51B4500C5F163 /* Build configuration list for PBXProject "objrpc-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B6CFA0AA1BB51B4500C5F163 /* Debug */,
+				B6CFA0AB1BB51B4500C5F163 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B6CFA0AC1BB51B4500C5F163 /* Build configuration list for PBXNativeTarget "objrpc-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B6CFA0AD1BB51B4500C5F163 /* Debug */,
+				B6CFA0AE1BB51B4500C5F163 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B6CFA09B1BB51B4500C5F163 /* Project object */;
+}
