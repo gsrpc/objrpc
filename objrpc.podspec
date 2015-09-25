@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.name         = "objrpc"
   s.version      = "1.0"
-  s.summary      = "A short description of objrpc."
+  s.summary      = "the gsrpc object-c injection runtimes"
 
   s.description  = <<-DESC
                    A longer description of objrpc in Markdown format.
@@ -79,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/gsrpc/objrpc.git", :tag => "1.0" }
+  s.source       = { :git => "https://github.com/gsrpc/objrpc.git", :tag => "v#{spec.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -94,8 +94,6 @@ Pod::Spec.new do |s|
   #s.exclude_files = "Classes/Exclude"
 
   s.public_header_files = "src/**/*.h"
-
-  s.xcconfig = { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/src'}
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -135,5 +133,7 @@ Pod::Spec.new do |s|
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
+
+  s.xcconfig = { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/**'}
 
 end
