@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "objrpc"
-  s.version      = "1.0"
+  s.version      = "1.0.0"
   s.summary      = "the gsrpc object-c injection runtimes"
 
   s.description  = <<-DESC
@@ -79,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/gsrpc/objrpc.git", :tag => "v#{spec.version}" }
+  s.source       = { :git => "https://github.com/gsrpc/objrpc.git", :tag => "v#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
