@@ -15,8 +15,10 @@
         },
 
         "objrpc":{
-            "main":"./src",
-            "test":"./test"
+
+            "test":{
+                "output":"./test"
+            }
         }
     }
 }
