@@ -3,6 +3,44 @@
 #import <com/gsrpc/gsrpc.gs.h>
 
 
+@implementation GSStateHelper
+
++ (void) marshal:(GSState) val withWriter:(id<GSWriter>) writer {
+    [writer WriteByte:(UInt8) val];
+}
+
++ (GSState) unmarshal:(id<GSReader>) reader {
+    return (GSState)[reader ReadByte];
+}
+
++ (NSString*) tostring:(GSState)val {
+    
+    switch(val)
+    {
+    
+    case GSStateDisconnect:
+       return @"GSStateDisconnect";
+    
+    case GSStateConnecting:
+       return @"GSStateConnecting";
+    
+    case GSStateConnected:
+       return @"GSStateConnected";
+    
+    case GSStateDisconnecting:
+       return @"GSStateDisconnecting";
+    
+    case GSStateClosed:
+       return @"GSStateClosed";
+    
+    default:
+       return @"Unknown val";
+   }
+}
+
+@end
+
+
 @implementation GSOSTypeHelper
 
 + (void) marshal:(GSOSType) val withWriter:(id<GSWriter>) writer {
@@ -43,6 +81,95 @@
 
 @end
 
+
+@implementation GSDevice
++ (instancetype)init {
+    return [[GSDevice alloc] init];
+}
+- (instancetype)init{
+    if (self = [super init]){
+        
+        _ID = @"";
+        
+        _Type = @"";
+        
+        _Arch = GSArchTypeX86;
+        
+        _OS = GSOSTypeWindows;
+        
+        _OSVersion = @"";
+        
+        _AppKey = @"";
+        
+    }
+    return self;
+}
+- (void) marshal:(id<GSWriter>) writer {
+    [writer WriteByte :(UInt8)6];
+
+	[writer WriteString :_ID];
+
+
+	[writer WriteString :_Type];
+
+
+	[GSArchTypeHelper marshal: _Arch withWriter: writer];
+
+
+	[GSOSTypeHelper marshal: _OS withWriter: writer];
+
+
+	[writer WriteString :_OSVersion];
+
+
+	[writer WriteString :_AppKey];
+
+
+}
+- (void) unmarshal:(id<GSReader>) reader {
+
+    UInt8 __fields = [reader ReadByte];
+
+
+	_ID = [reader ReadString];
+
+    if(-- __fields == 0) {
+        return;
+    }
+
+	_Type = [reader ReadString];
+
+    if(-- __fields == 0) {
+        return;
+    }
+
+	_Arch = [GSArchTypeHelper unmarshal: reader];
+
+    if(-- __fields == 0) {
+        return;
+    }
+
+	_OS = [GSOSTypeHelper unmarshal: reader];
+
+    if(-- __fields == 0) {
+        return;
+    }
+
+	_OSVersion = [reader ReadString];
+
+    if(-- __fields == 0) {
+        return;
+    }
+
+	_AppKey = [reader ReadString];
+
+    if(-- __fields == 0) {
+        return;
+    }
+
+}
+
+@end
 
 @implementation GSRemoteException
 + (instancetype)init {
@@ -112,44 +239,6 @@
     
     case GSCodeTunnel:
        return @"GSCodeTunnel";
-    
-    default:
-       return @"Unknown val";
-   }
-}
-
-@end
-
-
-@implementation GSStateHelper
-
-+ (void) marshal:(GSState) val withWriter:(id<GSWriter>) writer {
-    [writer WriteByte:(UInt8) val];
-}
-
-+ (GSState) unmarshal:(id<GSReader>) reader {
-    return (GSState)[reader ReadByte];
-}
-
-+ (NSString*) tostring:(GSState)val {
-    
-    switch(val)
-    {
-    
-    case GSStateDisconnect:
-       return @"GSStateDisconnect";
-    
-    case GSStateConnecting:
-       return @"GSStateConnecting";
-    
-    case GSStateConnected:
-       return @"GSStateConnected";
-    
-    case GSStateDisconnecting:
-       return @"GSStateDisconnecting";
-    
-    case GSStateClosed:
-       return @"GSStateClosed";
     
     default:
        return @"Unknown val";
@@ -473,95 +562,6 @@
 
 @end
 
-
-@implementation GSDevice
-+ (instancetype)init {
-    return [[GSDevice alloc] init];
-}
-- (instancetype)init{
-    if (self = [super init]){
-        
-        _ID = @"";
-        
-        _Type = @"";
-        
-        _Arch = GSArchTypeX86;
-        
-        _OS = GSOSTypeWindows;
-        
-        _OSVersion = @"";
-        
-        _AppKey = @"";
-        
-    }
-    return self;
-}
-- (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)6];
-
-	[writer WriteString :_ID];
-
-
-	[writer WriteString :_Type];
-
-
-	[GSArchTypeHelper marshal: _Arch withWriter: writer];
-
-
-	[GSOSTypeHelper marshal: _OS withWriter: writer];
-
-
-	[writer WriteString :_OSVersion];
-
-
-	[writer WriteString :_AppKey];
-
-
-}
-- (void) unmarshal:(id<GSReader>) reader {
-
-    UInt8 __fields = [reader ReadByte];
-
-
-	_ID = [reader ReadString];
-
-    if(-- __fields == 0) {
-        return;
-    }
-
-	_Type = [reader ReadString];
-
-    if(-- __fields == 0) {
-        return;
-    }
-
-	_Arch = [GSArchTypeHelper unmarshal: reader];
-
-    if(-- __fields == 0) {
-        return;
-    }
-
-	_OS = [GSOSTypeHelper unmarshal: reader];
-
-    if(-- __fields == 0) {
-        return;
-    }
-
-	_OSVersion = [reader ReadString];
-
-    if(-- __fields == 0) {
-        return;
-    }
-
-	_AppKey = [reader ReadString];
-
-    if(-- __fields == 0) {
-        return;
-    }
-
-}
-
-@end
 
 @implementation GSWhoAmI
 + (instancetype)init {

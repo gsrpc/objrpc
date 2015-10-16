@@ -10,15 +10,7 @@
 
     "properties":{
         "gsrpc":{
-            "main":["github.com/gsrpc/gsrpc"],
-            "test":["github.com/gsrpc/gsrpc/test"]
-        },
-
-        "objrpc":{
-
-            "test":{
-                "output":"./test"
-            }
+            "main":["github.com/gsrpc/gsrpc"]
         }
     }
 }
