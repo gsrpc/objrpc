@@ -43,6 +43,9 @@
 @required
 - (BOOL)ReadBool;
 
+@required
+- (void) ReadSkip:(UInt8)tag;
+
 @end
 
 @protocol GSWriter <NSObject>

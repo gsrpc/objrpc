@@ -1,4 +1,5 @@
 #import "stream.h"
+#import <com/gsrpc/gsrpc.gs.h>
 
 @implementation GSBytesReader {
   NSMutableData *_content;
@@ -153,6 +154,55 @@
 
   return TRUE;
 }
+
+
+- (void) ReadSkip:(UInt8)tag {
+    switch (tag) {
+        case GSTagI8:
+            [self ReadByte];
+            break;
+        case GSTagI16:
+            [self ReadUInt16];
+            break;
+        case GSTagI32:
+            [self ReadUInt32];
+            break;
+        case GSTagI64:
+            [self ReadUInt64];
+            break;
+        case GSTagString:
+            [self ReadString];
+            break;
+        case GSTagTable:{
+            
+            UInt8 fields = [self ReadByte];
+            
+            for (int i = 0; i < (int)fields; i++) {
+                tag = [self ReadByte];
+                [self ReadSkip:tag];
+            }
+            
+            break;
+        }
+            
+            
+       default:
+            
+            if ((tag& 0xf) == GSTagList) {
+                short length = [self ReadUInt16];
+                
+                tag = (UInt8)((tag >> 4) & 0xf);
+                
+                for (int i =0; i < length; i ++ ) {
+                    [self ReadSkip:tag];
+                }
+            }
+            
+            break;
+
+    }
+}
+
 
 @end
 
