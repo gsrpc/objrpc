@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "objrpc"
-  s.version      = "1.0.3"
+  s.version      = "1.0.4"
   s.summary      = "the gsrpc object-c injection runtimes"
 
   s.description  = <<-DESC
@@ -65,11 +65,11 @@ Pod::Spec.new do |s|
   #
 
   # s.platform     = :ios
-  s.platform     = :ios, "7.0"
+  # s.platform     = :ios, "7.0"
 
   #  When using multiple platforms
-  # s.ios.deployment_target = "5.0"
-  # s.osx.deployment_target = "10.7"
+  s.ios.deployment_target = "7.0"
+  s.osx.deployment_target = "10.7"
   # s.watchos.deployment_target = "2.0"
 
 

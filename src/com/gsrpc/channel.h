@@ -28,6 +28,7 @@
 
 @required
 - (void)Send:(GSRequest *)call withCallback:(id<GSCallback>) callback;
+- (NSError*)Post:(GSRequest *)call;
 @end
 
 
