@@ -1,42 +1,66 @@
 #ifndef COM_GSRPC_GSRPC_GS
 #define COM_GSRPC_GSRPC_GS
-#import <com/gsrpc/stream.h>
-
 #import <com/gsrpc/channel.h>
 
+#import <com/gsrpc/stream.h>
 
-@class GSParam;
+
+typedef enum GSState:UInt8 GSState;
+
+@class GSMessage;
+
+@class GSTime;
 
 @class GSResponse;
 
 typedef enum GSOSType:UInt8 GSOSType;
 
-@class GSDevice;
-
-@class GSWhoAmI;
-
-@class GSUnmarshalException;
-
-@class GSRemoteException;
-
-@class GSMessage;
-
-@class GSRequest;
-
-typedef enum GSState:UInt8 GSState;
-
-@class GSTunnel;
-
 typedef enum GSArchType:UInt8 GSArchType;
 
 @class GSInvalidContract;
 
-typedef enum GSTag:UInt32 GSTag;
+@class GSKV;
 
 typedef enum GSCode:UInt8 GSCode;
 
+@class GSRequest;
 
-@interface GSParam : NSObject
+@class GSDevice;
+
+@class GSUnmarshalException;
+
+typedef enum GSTag:UInt32 GSTag;
+
+@class GSParam;
+
+@class GSWhoAmI;
+
+@class GSRemoteException;
+
+
+// GSState enum
+enum GSState:UInt8{ 
+	GSStateDisconnect = 0,
+	GSStateConnecting = 1,
+	GSStateConnected = 2,
+	GSStateDisconnecting = 3,
+	GSStateClosed = 4
+ };
+
+// GSState enum marshal/unmarshal helper interface
+@interface GSStateHelper : NSObject
++ (void) marshal:(GSState) val withWriter:(id<GSWriter>) writer;
++ (GSState) unmarshal:(id<GSReader>) reader;
++ (NSString*) tostring :(GSState)val;
+@end
+
+
+
+@interface GSMessage : NSObject
+
+@property GSCode Code;
+
+@property UInt8 Agent;
 
 @property(nonatomic, strong) NSMutableData * Content;
 
@@ -48,15 +72,29 @@ typedef enum GSCode:UInt8 GSCode;
 
 
 
+@interface GSTime : NSObject
+
+@property UInt64 Second;
+
+@property UInt64 Nano;
+
++ (instancetype)init;
+- (void) marshal:(id<GSWriter>) writer;
+- (void) unmarshal:(id<GSReader>) reader;
+
+@end
+
+
+
 @interface GSResponse : NSObject
 
-@property UInt16 ID;
-
-@property UInt16 Service;
+@property UInt32 ID;
 
 @property SInt8 Exception;
 
 @property(nonatomic, strong) NSMutableData * Content;
+
+@property UInt64 Trace;
 
 + (instancetype)init;
 - (void) marshal:(id<GSWriter>) writer;
@@ -81,132 +119,6 @@ enum GSOSType:UInt8{
 + (void) marshal:(GSOSType) val withWriter:(id<GSWriter>) writer;
 + (GSOSType) unmarshal:(id<GSReader>) reader;
 + (NSString*) tostring :(GSOSType)val;
-@end
-
-
-
-@interface GSDevice : NSObject
-
-@property(nonatomic, strong) NSString* ID;
-
-@property(nonatomic, strong) NSString* Type;
-
-@property GSArchType Arch;
-
-@property GSOSType OS;
-
-@property(nonatomic, strong) NSString* OSVersion;
-
-@property(nonatomic, strong) NSString* AppKey;
-
-+ (instancetype)init;
-- (void) marshal:(id<GSWriter>) writer;
-- (void) unmarshal:(id<GSReader>) reader;
-
-@end
-
-
-
-@interface GSWhoAmI : NSObject
-
-@property(nonatomic, strong) GSDevice* ID;
-
-@property(nonatomic, strong) NSMutableData * Context;
-
-+ (instancetype)init;
-- (void) marshal:(id<GSWriter>) writer;
-- (void) unmarshal:(id<GSReader>) reader;
-
-@end
-
-
-
-@interface GSUnmarshalException : NSObject
-
-+ (instancetype)init;
-- (void) marshal:(id<GSWriter>) writer;
-- (void) unmarshal:(id<GSReader>) reader;
-
-- (NSError*) asNSError;
-
-@end
-
-
-
-@interface GSRemoteException : NSObject
-
-+ (instancetype)init;
-- (void) marshal:(id<GSWriter>) writer;
-- (void) unmarshal:(id<GSReader>) reader;
-
-- (NSError*) asNSError;
-
-@end
-
-
-
-@interface GSMessage : NSObject
-
-@property GSCode Code;
-
-@property UInt8 Agent;
-
-@property(nonatomic, strong) NSMutableData * Content;
-
-+ (instancetype)init;
-- (void) marshal:(id<GSWriter>) writer;
-- (void) unmarshal:(id<GSReader>) reader;
-
-@end
-
-
-
-@interface GSRequest : NSObject
-
-@property UInt16 ID;
-
-@property UInt16 Method;
-
-@property UInt16 Service;
-
-@property(nonatomic, strong) NSMutableArray * Params;
-
-+ (instancetype)init;
-- (void) marshal:(id<GSWriter>) writer;
-- (void) unmarshal:(id<GSReader>) reader;
-
-@end
-
-
-
-// GSState enum
-enum GSState:UInt8{ 
-	GSStateDisconnect = 0,
-	GSStateConnecting = 1,
-	GSStateConnected = 2,
-	GSStateDisconnecting = 3,
-	GSStateClosed = 4
- };
-
-// GSState enum marshal/unmarshal helper interface
-@interface GSStateHelper : NSObject
-+ (void) marshal:(GSState) val withWriter:(id<GSWriter>) writer;
-+ (GSState) unmarshal:(id<GSReader>) reader;
-+ (NSString*) tostring :(GSState)val;
-@end
-
-
-
-@interface GSTunnel : NSObject
-
-@property(nonatomic, strong) GSDevice* ID;
-
-@property(nonatomic, strong) GSMessage* Message;
-
-+ (instancetype)init;
-- (void) marshal:(id<GSWriter>) writer;
-- (void) unmarshal:(id<GSReader>) reader;
-
 @end
 
 
@@ -239,6 +151,97 @@ enum GSArchType:UInt8{
 
 
 
+@interface GSKV : NSObject
+
+@property(nonatomic, strong) NSMutableData * Key;
+
+@property(nonatomic, strong) NSMutableData * Value;
+
++ (instancetype)init;
+- (void) marshal:(id<GSWriter>) writer;
+- (void) unmarshal:(id<GSReader>) reader;
+
+@end
+
+
+
+// GSCode enum
+enum GSCode:UInt8{ 
+	GSCodeHeartbeat = 0,
+	GSCodeWhoAmI = 1,
+	GSCodeRequest = 2,
+	GSCodeResponse = 3,
+	GSCodeAccept = 4,
+	GSCodeReject = 5,
+	GSCodeTunnel = 6,
+	GSCodeTunnelWhoAmI = 7
+ };
+
+// GSCode enum marshal/unmarshal helper interface
+@interface GSCodeHelper : NSObject
++ (void) marshal:(GSCode) val withWriter:(id<GSWriter>) writer;
++ (GSCode) unmarshal:(id<GSReader>) reader;
++ (NSString*) tostring :(GSCode)val;
+@end
+
+
+
+@interface GSRequest : NSObject
+
+@property UInt32 ID;
+
+@property UInt16 Service;
+
+@property UInt16 Method;
+
+@property(nonatomic, strong) NSMutableArray * Params;
+
+@property UInt64 Trace;
+
+@property UInt32 Prev;
+
++ (instancetype)init;
+- (void) marshal:(id<GSWriter>) writer;
+- (void) unmarshal:(id<GSReader>) reader;
+
+@end
+
+
+
+@interface GSDevice : NSObject
+
+@property(nonatomic, strong) NSString* ID;
+
+@property(nonatomic, strong) NSString* Type;
+
+@property GSArchType Arch;
+
+@property GSOSType OS;
+
+@property(nonatomic, strong) NSString* OSVersion;
+
+@property(nonatomic, strong) NSString* AppKey;
+
++ (instancetype)init;
+- (void) marshal:(id<GSWriter>) writer;
+- (void) unmarshal:(id<GSReader>) reader;
+
+@end
+
+
+
+@interface GSUnmarshalException : NSObject
+
++ (instancetype)init;
+- (void) marshal:(id<GSWriter>) writer;
+- (void) unmarshal:(id<GSReader>) reader;
+
+- (NSError*) asNSError;
+
+@end
+
+
+
 // GSTag enum
 enum GSTag:UInt32{ 
 	GSTagI8 = 0,
@@ -260,22 +263,40 @@ enum GSTag:UInt32{
 
 
 
-// GSCode enum
-enum GSCode:UInt8{ 
-	GSCodeHeartbeat = 0,
-	GSCodeWhoAmI = 1,
-	GSCodeRequest = 2,
-	GSCodeResponse = 3,
-	GSCodeAccept = 4,
-	GSCodeReject = 5,
-	GSCodeTunnel = 6
- };
+@interface GSParam : NSObject
 
-// GSCode enum marshal/unmarshal helper interface
-@interface GSCodeHelper : NSObject
-+ (void) marshal:(GSCode) val withWriter:(id<GSWriter>) writer;
-+ (GSCode) unmarshal:(id<GSReader>) reader;
-+ (NSString*) tostring :(GSCode)val;
+@property(nonatomic, strong) NSMutableData * Content;
+
++ (instancetype)init;
+- (void) marshal:(id<GSWriter>) writer;
+- (void) unmarshal:(id<GSReader>) reader;
+
+@end
+
+
+
+@interface GSWhoAmI : NSObject
+
+@property(nonatomic, strong) GSDevice* ID;
+
+@property(nonatomic, strong) NSMutableData * Context;
+
++ (instancetype)init;
+- (void) marshal:(id<GSWriter>) writer;
+- (void) unmarshal:(id<GSReader>) reader;
+
+@end
+
+
+
+@interface GSRemoteException : NSObject
+
++ (instancetype)init;
+- (void) marshal:(id<GSWriter>) writer;
+- (void) unmarshal:(id<GSReader>) reader;
+
+- (NSError*) asNSError;
+
 @end
 
 

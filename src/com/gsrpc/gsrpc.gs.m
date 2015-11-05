@@ -3,12 +3,54 @@
 #import <com/gsrpc/gsrpc.gs.h>
 
 
-@implementation GSParam
+@implementation GSStateHelper
+
++ (void) marshal:(GSState) val withWriter:(id<GSWriter>) writer {
+    [writer WriteByte:(UInt8) val];
+}
+
++ (GSState) unmarshal:(id<GSReader>) reader {
+    return (GSState)[reader ReadByte];
+}
+
++ (NSString*) tostring:(GSState)val {
+    
+    switch(val)
+    {
+    
+    case GSStateDisconnect:
+       return @"GSStateDisconnect";
+    
+    case GSStateConnecting:
+       return @"GSStateConnecting";
+    
+    case GSStateConnected:
+       return @"GSStateConnected";
+    
+    case GSStateDisconnecting:
+       return @"GSStateDisconnecting";
+    
+    case GSStateClosed:
+       return @"GSStateClosed";
+    
+    default:
+       return @"Unknown val";
+   }
+}
+
+@end
+
+
+@implementation GSMessage
 + (instancetype)init {
-    return [[GSParam alloc] init];
+    return [[GSMessage alloc] init];
 }
 - (instancetype)init{
     if (self = [super init]){
+        
+        _Code = GSCodeHeartbeat;
+        
+        _Agent = (UInt8)0;
         
         _Content = [[NSMutableData alloc] init];
         
@@ -17,43 +59,86 @@
 }
 
 
-- (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)1];
 
-    [writer WriteByte :(UInt8)((GSTagI8 << 4)|GSTagList)];
+- (void) marshal:(id<GSWriter>) writer {
+
+	[GSCodeHelper marshal: _Code withWriter: writer];
+
+
+	[writer WriteByte :_Agent];
+
+
 	[writer WriteBytes: _Content];
 
 
 }
+
 - (void) unmarshal:(id<GSReader>) reader {
 
-    UInt8 __fields = [reader ReadByte];
+    {
+        	_Code = [GSCodeHelper unmarshal: reader];
 
+    }
 
     {
-        UInt8 tag = [reader ReadByte];
+        	_Agent = [reader ReadByte];
 
-        if(tag != GSTagSkip) {
+    }
+
+    {
         	_Content = [reader ReadBytes];
 
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
     }
 
-
-    for(int i = 0; i < (int)__fields; i ++) {
-        UInt8 tag = [reader ReadByte];
-
-        if (tag == GSTagSkip) {
-            continue;
-        }
-
-        [reader ReadSkip:tag];
-    }
 }
+
+
+
+
+
+@end
+
+@implementation GSTime
++ (instancetype)init {
+    return [[GSTime alloc] init];
+}
+- (instancetype)init{
+    if (self = [super init]){
+        
+        _Second = (UInt64)0;
+        
+        _Nano = (UInt64)0;
+        
+    }
+    return self;
+}
+
+
+
+- (void) marshal:(id<GSWriter>) writer {
+
+	[writer WriteUInt64 :_Second];
+
+
+	[writer WriteUInt64 :_Nano];
+
+
+}
+
+- (void) unmarshal:(id<GSReader>) reader {
+
+    {
+        	_Second = [reader ReadUInt64];
+
+    }
+
+    {
+        	_Nano = [reader ReadUInt64];
+
+    }
+
+}
+
 
 
 
@@ -67,107 +152,60 @@
 - (instancetype)init{
     if (self = [super init]){
         
-        _ID = (UInt16)0;
-        
-        _Service = (UInt16)0;
+        _ID = (UInt32)0;
         
         _Exception = (SInt8)0;
         
         _Content = [[NSMutableData alloc] init];
+        
+        _Trace = (UInt64)0;
         
     }
     return self;
 }
 
 
+
 - (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)4];
 
-    [writer WriteByte :(UInt8)GSTagI16];
-	[writer WriteUInt16 :_ID];
+	[writer WriteUInt32 :_ID];
 
 
-    [writer WriteByte :(UInt8)GSTagI16];
-	[writer WriteUInt16 :_Service];
-
-
-    [writer WriteByte :(UInt8)GSTagI8];
 	[writer WriteSByte :_Exception];
 
 
-    [writer WriteByte :(UInt8)((GSTagI8 << 4)|GSTagList)];
 	[writer WriteBytes: _Content];
 
 
+	[writer WriteUInt64 :_Trace];
+
+
 }
+
 - (void) unmarshal:(id<GSReader>) reader {
 
-    UInt8 __fields = [reader ReadByte];
-
-
     {
-        UInt8 tag = [reader ReadByte];
+        	_ID = [reader ReadUInt32];
 
-        if(tag != GSTagSkip) {
-        	_ID = [reader ReadUInt16];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
     }
 
     {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_Service = [reader ReadUInt16];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
         	_Exception = [reader ReadSByte];
 
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
     }
 
     {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
         	_Content = [reader ReadBytes];
 
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
     }
 
+    {
+        	_Trace = [reader ReadUInt64];
 
-    for(int i = 0; i < (int)__fields; i ++) {
-        UInt8 tag = [reader ReadByte];
-
-        if (tag == GSTagSkip) {
-            continue;
-        }
-
-        [reader ReadSkip:tag];
     }
+
 }
+
 
 
 
@@ -214,667 +252,6 @@
 
 @end
 
-
-@implementation GSDevice
-+ (instancetype)init {
-    return [[GSDevice alloc] init];
-}
-- (instancetype)init{
-    if (self = [super init]){
-        
-        _ID = @"";
-        
-        _Type = @"";
-        
-        _Arch = GSArchTypeX86;
-        
-        _OS = GSOSTypeWindows;
-        
-        _OSVersion = @"";
-        
-        _AppKey = @"";
-        
-    }
-    return self;
-}
-
-
-- (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)6];
-
-    [writer WriteByte :(UInt8)GSTagString];
-	[writer WriteString :_ID];
-
-
-    [writer WriteByte :(UInt8)GSTagString];
-	[writer WriteString :_Type];
-
-
-    [writer WriteByte :(UInt8)GSTagI32];
-	[GSArchTypeHelper marshal: _Arch withWriter: writer];
-
-
-    [writer WriteByte :(UInt8)GSTagI32];
-	[GSOSTypeHelper marshal: _OS withWriter: writer];
-
-
-    [writer WriteByte :(UInt8)GSTagString];
-	[writer WriteString :_OSVersion];
-
-
-    [writer WriteByte :(UInt8)GSTagString];
-	[writer WriteString :_AppKey];
-
-
-}
-- (void) unmarshal:(id<GSReader>) reader {
-
-    UInt8 __fields = [reader ReadByte];
-
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_ID = [reader ReadString];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_Type = [reader ReadString];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_Arch = [GSArchTypeHelper unmarshal: reader];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_OS = [GSOSTypeHelper unmarshal: reader];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_OSVersion = [reader ReadString];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_AppKey = [reader ReadString];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-
-    for(int i = 0; i < (int)__fields; i ++) {
-        UInt8 tag = [reader ReadByte];
-
-        if (tag == GSTagSkip) {
-            continue;
-        }
-
-        [reader ReadSkip:tag];
-    }
-}
-
-
-
-
-@end
-
-@implementation GSWhoAmI
-+ (instancetype)init {
-    return [[GSWhoAmI alloc] init];
-}
-- (instancetype)init{
-    if (self = [super init]){
-        
-        _ID = [[GSDevice alloc] init];
-        
-        _Context = [[NSMutableData alloc] init];
-        
-    }
-    return self;
-}
-
-
-- (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)2];
-
-    [writer WriteByte :(UInt8)GSTagTable];
-	[_ID marshal: writer];
-
-
-    [writer WriteByte :(UInt8)((GSTagI8 << 4)|GSTagList)];
-	[writer WriteBytes: _Context];
-
-
-}
-- (void) unmarshal:(id<GSReader>) reader {
-
-    UInt8 __fields = [reader ReadByte];
-
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	[_ID unmarshal:reader ];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_Context = [reader ReadBytes];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-
-    for(int i = 0; i < (int)__fields; i ++) {
-        UInt8 tag = [reader ReadByte];
-
-        if (tag == GSTagSkip) {
-            continue;
-        }
-
-        [reader ReadSkip:tag];
-    }
-}
-
-
-
-
-@end
-
-@implementation GSUnmarshalException
-+ (instancetype)init {
-    return [[GSUnmarshalException alloc] init];
-}
-- (instancetype)init{
-    if (self = [super init]){
-        
-    }
-    return self;
-}
-
-
-- (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)0];
-
-}
-- (void) unmarshal:(id<GSReader>) reader {
-
-    UInt8 __fields = [reader ReadByte];
-
-
-
-    for(int i = 0; i < (int)__fields; i ++) {
-        UInt8 tag = [reader ReadByte];
-
-        if (tag == GSTagSkip) {
-            continue;
-        }
-
-        [reader ReadSkip:tag];
-    }
-}
-
-
-
-- (NSError*) asNSError {
-    NSString *domain = @"GSUnmarshalException";
-
-    NSDictionary *userInfo = @{ @"source" : self };
-
-    NSError *error = [NSError errorWithDomain:domain code:-101 userInfo:userInfo];
-
-    return error;
-}
-
-
-@end
-
-@implementation GSRemoteException
-+ (instancetype)init {
-    return [[GSRemoteException alloc] init];
-}
-- (instancetype)init{
-    if (self = [super init]){
-        
-    }
-    return self;
-}
-
-
-- (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)0];
-
-}
-- (void) unmarshal:(id<GSReader>) reader {
-
-    UInt8 __fields = [reader ReadByte];
-
-
-
-    for(int i = 0; i < (int)__fields; i ++) {
-        UInt8 tag = [reader ReadByte];
-
-        if (tag == GSTagSkip) {
-            continue;
-        }
-
-        [reader ReadSkip:tag];
-    }
-}
-
-
-
-- (NSError*) asNSError {
-    NSString *domain = @"GSRemoteException";
-
-    NSDictionary *userInfo = @{ @"source" : self };
-
-    NSError *error = [NSError errorWithDomain:domain code:-101 userInfo:userInfo];
-
-    return error;
-}
-
-
-@end
-
-@implementation GSMessage
-+ (instancetype)init {
-    return [[GSMessage alloc] init];
-}
-- (instancetype)init{
-    if (self = [super init]){
-        
-        _Code = GSCodeHeartbeat;
-        
-        _Agent = (UInt8)0;
-        
-        _Content = [[NSMutableData alloc] init];
-        
-    }
-    return self;
-}
-
-
-- (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)3];
-
-    [writer WriteByte :(UInt8)GSTagI32];
-	[GSCodeHelper marshal: _Code withWriter: writer];
-
-
-    [writer WriteByte :(UInt8)GSTagI8];
-	[writer WriteByte :_Agent];
-
-
-    [writer WriteByte :(UInt8)((GSTagI8 << 4)|GSTagList)];
-	[writer WriteBytes: _Content];
-
-
-}
-- (void) unmarshal:(id<GSReader>) reader {
-
-    UInt8 __fields = [reader ReadByte];
-
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_Code = [GSCodeHelper unmarshal: reader];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_Agent = [reader ReadByte];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_Content = [reader ReadBytes];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-
-    for(int i = 0; i < (int)__fields; i ++) {
-        UInt8 tag = [reader ReadByte];
-
-        if (tag == GSTagSkip) {
-            continue;
-        }
-
-        [reader ReadSkip:tag];
-    }
-}
-
-
-
-
-@end
-
-@implementation GSRequest
-+ (instancetype)init {
-    return [[GSRequest alloc] init];
-}
-- (instancetype)init{
-    if (self = [super init]){
-        
-        _ID = (UInt16)0;
-        
-        _Method = (UInt16)0;
-        
-        _Service = (UInt16)0;
-        
-        _Params = [NSMutableArray arrayWithCapacity: 0];
-        
-    }
-    return self;
-}
-
-
-- (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)4];
-
-    [writer WriteByte :(UInt8)GSTagI16];
-	[writer WriteUInt16 :_ID];
-
-
-    [writer WriteByte :(UInt8)GSTagI16];
-	[writer WriteUInt16 :_Method];
-
-
-    [writer WriteByte :(UInt8)GSTagI16];
-	[writer WriteUInt16 :_Service];
-
-
-    [writer WriteByte :(UInt8)((GSTagTable << 4)|GSTagList)];
-	[writer WriteUInt16:_Params.count];
-	for(id v1 in _Params){
-		GSParam* vv1 = (GSParam*)v1;
-		[vv1 marshal: writer];
-	}
-
-
-}
-- (void) unmarshal:(id<GSReader>) reader {
-
-    UInt8 __fields = [reader ReadByte];
-
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_ID = [reader ReadUInt16];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_Method = [reader ReadUInt16];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	_Service = [reader ReadUInt16];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	UInt16 imax1 = [reader ReadUInt16];
-
-	for(UInt16 i1 = 0; i1 < imax1; i1 ++ ){
-
-		GSParam* v1 = [[GSParam alloc] init];
-
-		[v1 unmarshal:reader ];
-
-		[ _Params addObject: v1];
-
-	}
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-
-    for(int i = 0; i < (int)__fields; i ++) {
-        UInt8 tag = [reader ReadByte];
-
-        if (tag == GSTagSkip) {
-            continue;
-        }
-
-        [reader ReadSkip:tag];
-    }
-}
-
-
-
-
-@end
-
-@implementation GSStateHelper
-
-+ (void) marshal:(GSState) val withWriter:(id<GSWriter>) writer {
-    [writer WriteByte:(UInt8) val];
-}
-
-+ (GSState) unmarshal:(id<GSReader>) reader {
-    return (GSState)[reader ReadByte];
-}
-
-+ (NSString*) tostring:(GSState)val {
-    
-    switch(val)
-    {
-    
-    case GSStateDisconnect:
-       return @"GSStateDisconnect";
-    
-    case GSStateConnecting:
-       return @"GSStateConnecting";
-    
-    case GSStateConnected:
-       return @"GSStateConnected";
-    
-    case GSStateDisconnecting:
-       return @"GSStateDisconnecting";
-    
-    case GSStateClosed:
-       return @"GSStateClosed";
-    
-    default:
-       return @"Unknown val";
-   }
-}
-
-@end
-
-
-@implementation GSTunnel
-+ (instancetype)init {
-    return [[GSTunnel alloc] init];
-}
-- (instancetype)init{
-    if (self = [super init]){
-        
-        _ID = [[GSDevice alloc] init];
-        
-        _Message = [[GSMessage alloc] init];
-        
-    }
-    return self;
-}
-
-
-- (void) marshal:(id<GSWriter>) writer {
-    [writer WriteByte :(UInt8)2];
-
-    [writer WriteByte :(UInt8)GSTagTable];
-	[_ID marshal: writer];
-
-
-    [writer WriteByte :(UInt8)GSTagTable];
-	[_Message marshal: writer];
-
-
-}
-- (void) unmarshal:(id<GSReader>) reader {
-
-    UInt8 __fields = [reader ReadByte];
-
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	[_ID unmarshal:reader ];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-    {
-        UInt8 tag = [reader ReadByte];
-
-        if(tag != GSTagSkip) {
-        	[_Message unmarshal:reader ];
-
-        }
-
-        if(-- __fields == 0) {
-            return;
-        }
-    }
-
-
-    for(int i = 0; i < (int)__fields; i ++) {
-        UInt8 tag = [reader ReadByte];
-
-        if (tag == GSTagSkip) {
-            continue;
-        }
-
-        [reader ReadSkip:tag];
-    }
-}
-
-
-
-
-@end
 
 @implementation GSArchTypeHelper
 
@@ -956,6 +333,336 @@
 
 @end
 
+@implementation GSKV
++ (instancetype)init {
+    return [[GSKV alloc] init];
+}
+- (instancetype)init{
+    if (self = [super init]){
+        
+        _Key = [[NSMutableData alloc] init];
+        
+        _Value = [[NSMutableData alloc] init];
+        
+    }
+    return self;
+}
+
+
+
+- (void) marshal:(id<GSWriter>) writer {
+
+	[writer WriteBytes: _Key];
+
+
+	[writer WriteBytes: _Value];
+
+
+}
+
+- (void) unmarshal:(id<GSReader>) reader {
+
+    {
+        	_Key = [reader ReadBytes];
+
+    }
+
+    {
+        	_Value = [reader ReadBytes];
+
+    }
+
+}
+
+
+
+
+
+@end
+
+@implementation GSCodeHelper
+
++ (void) marshal:(GSCode) val withWriter:(id<GSWriter>) writer {
+    [writer WriteByte:(UInt8) val];
+}
+
++ (GSCode) unmarshal:(id<GSReader>) reader {
+    return (GSCode)[reader ReadByte];
+}
+
++ (NSString*) tostring:(GSCode)val {
+    
+    switch(val)
+    {
+    
+    case GSCodeHeartbeat:
+       return @"GSCodeHeartbeat";
+    
+    case GSCodeWhoAmI:
+       return @"GSCodeWhoAmI";
+    
+    case GSCodeRequest:
+       return @"GSCodeRequest";
+    
+    case GSCodeResponse:
+       return @"GSCodeResponse";
+    
+    case GSCodeAccept:
+       return @"GSCodeAccept";
+    
+    case GSCodeReject:
+       return @"GSCodeReject";
+    
+    case GSCodeTunnel:
+       return @"GSCodeTunnel";
+    
+    case GSCodeTunnelWhoAmI:
+       return @"GSCodeTunnelWhoAmI";
+    
+    default:
+       return @"Unknown val";
+   }
+}
+
+@end
+
+
+@implementation GSRequest
++ (instancetype)init {
+    return [[GSRequest alloc] init];
+}
+- (instancetype)init{
+    if (self = [super init]){
+        
+        _ID = (UInt32)0;
+        
+        _Service = (UInt16)0;
+        
+        _Method = (UInt16)0;
+        
+        _Params = [NSMutableArray arrayWithCapacity: 0];
+        
+        _Trace = (UInt64)0;
+        
+        _Prev = (UInt32)0;
+        
+    }
+    return self;
+}
+
+
+
+- (void) marshal:(id<GSWriter>) writer {
+
+	[writer WriteUInt32 :_ID];
+
+
+	[writer WriteUInt16 :_Service];
+
+
+	[writer WriteUInt16 :_Method];
+
+
+	[writer WriteUInt16:_Params.count];
+	for(id v1 in _Params){
+		GSParam* vv1 = (GSParam*)v1;
+		[vv1 marshal: writer];
+	}
+
+
+	[writer WriteUInt64 :_Trace];
+
+
+	[writer WriteUInt32 :_Prev];
+
+
+}
+
+- (void) unmarshal:(id<GSReader>) reader {
+
+    {
+        	_ID = [reader ReadUInt32];
+
+    }
+
+    {
+        	_Service = [reader ReadUInt16];
+
+    }
+
+    {
+        	_Method = [reader ReadUInt16];
+
+    }
+
+    {
+        	UInt16 imax1 = [reader ReadUInt16];
+
+	for(UInt16 i1 = 0; i1 < imax1; i1 ++ ){
+
+		GSParam* v1 = [[GSParam alloc] init];
+
+		[v1 unmarshal:reader ];
+
+		[ _Params addObject: v1];
+
+	}
+
+    }
+
+    {
+        	_Trace = [reader ReadUInt64];
+
+    }
+
+    {
+        	_Prev = [reader ReadUInt32];
+
+    }
+
+}
+
+
+
+
+
+@end
+
+@implementation GSDevice
++ (instancetype)init {
+    return [[GSDevice alloc] init];
+}
+- (instancetype)init{
+    if (self = [super init]){
+        
+        _ID = @"";
+        
+        _Type = @"";
+        
+        _Arch = GSArchTypeX86;
+        
+        _OS = GSOSTypeWindows;
+        
+        _OSVersion = @"";
+        
+        _AppKey = @"";
+        
+    }
+    return self;
+}
+
+
+
+- (void) marshal:(id<GSWriter>) writer {
+
+	[writer WriteString :_ID];
+
+
+	[writer WriteString :_Type];
+
+
+	[GSArchTypeHelper marshal: _Arch withWriter: writer];
+
+
+	[GSOSTypeHelper marshal: _OS withWriter: writer];
+
+
+	[writer WriteString :_OSVersion];
+
+
+	[writer WriteString :_AppKey];
+
+
+}
+
+- (void) unmarshal:(id<GSReader>) reader {
+
+    {
+        	_ID = [reader ReadString];
+
+    }
+
+    {
+        	_Type = [reader ReadString];
+
+    }
+
+    {
+        	_Arch = [GSArchTypeHelper unmarshal: reader];
+
+    }
+
+    {
+        	_OS = [GSOSTypeHelper unmarshal: reader];
+
+    }
+
+    {
+        	_OSVersion = [reader ReadString];
+
+    }
+
+    {
+        	_AppKey = [reader ReadString];
+
+    }
+
+}
+
+
+
+
+
+@end
+
+@implementation GSUnmarshalException
++ (instancetype)init {
+    return [[GSUnmarshalException alloc] init];
+}
+- (instancetype)init{
+    if (self = [super init]){
+        
+    }
+    return self;
+}
+
+
+- (void) marshal:(id<GSWriter>) writer {
+    [writer WriteByte :(UInt8)0];
+
+}
+- (void) unmarshal:(id<GSReader>) reader {
+
+    UInt8 __fields = [reader ReadByte];
+
+
+
+    for(int i = 0; i < (int)__fields; i ++) {
+        UInt8 tag = [reader ReadByte];
+
+        if (tag == GSTagSkip) {
+            continue;
+        }
+
+        [reader ReadSkip:tag];
+    }
+}
+
+
+
+- (NSError*) asNSError {
+    NSString *domain = @"GSUnmarshalException";
+
+    NSDictionary *userInfo = @{ @"source" : self };
+
+    NSError *error = [NSError errorWithDomain:domain code:-101 userInfo:userInfo];
+
+    return error;
+}
+
+
+@end
+
 @implementation GSTagHelper
 
 + (void) marshal:(GSTag) val withWriter:(id<GSWriter>) writer {
@@ -1003,46 +710,134 @@
 @end
 
 
-@implementation GSCodeHelper
-
-+ (void) marshal:(GSCode) val withWriter:(id<GSWriter>) writer {
-    [writer WriteByte:(UInt8) val];
+@implementation GSParam
++ (instancetype)init {
+    return [[GSParam alloc] init];
+}
+- (instancetype)init{
+    if (self = [super init]){
+        
+        _Content = [[NSMutableData alloc] init];
+        
+    }
+    return self;
 }
 
-+ (GSCode) unmarshal:(id<GSReader>) reader {
-    return (GSCode)[reader ReadByte];
+
+
+- (void) marshal:(id<GSWriter>) writer {
+
+	[writer WriteBytes: _Content];
+
+
 }
 
-+ (NSString*) tostring:(GSCode)val {
-    
-    switch(val)
+- (void) unmarshal:(id<GSReader>) reader {
+
     {
-    
-    case GSCodeHeartbeat:
-       return @"GSCodeHeartbeat";
-    
-    case GSCodeWhoAmI:
-       return @"GSCodeWhoAmI";
-    
-    case GSCodeRequest:
-       return @"GSCodeRequest";
-    
-    case GSCodeResponse:
-       return @"GSCodeResponse";
-    
-    case GSCodeAccept:
-       return @"GSCodeAccept";
-    
-    case GSCodeReject:
-       return @"GSCodeReject";
-    
-    case GSCodeTunnel:
-       return @"GSCodeTunnel";
-    
-    default:
-       return @"Unknown val";
-   }
+        	_Content = [reader ReadBytes];
+
+    }
+
 }
+
+
+
+
 
 @end
 
+@implementation GSWhoAmI
++ (instancetype)init {
+    return [[GSWhoAmI alloc] init];
+}
+- (instancetype)init{
+    if (self = [super init]){
+        
+        _ID = [[GSDevice alloc] init];
+        
+        _Context = [[NSMutableData alloc] init];
+        
+    }
+    return self;
+}
+
+
+
+- (void) marshal:(id<GSWriter>) writer {
+
+	[_ID marshal: writer];
+
+
+	[writer WriteBytes: _Context];
+
+
+}
+
+- (void) unmarshal:(id<GSReader>) reader {
+
+    {
+        	[_ID unmarshal:reader ];
+
+    }
+
+    {
+        	_Context = [reader ReadBytes];
+
+    }
+
+}
+
+
+
+
+
+@end
+
+@implementation GSRemoteException
++ (instancetype)init {
+    return [[GSRemoteException alloc] init];
+}
+- (instancetype)init{
+    if (self = [super init]){
+        
+    }
+    return self;
+}
+
+
+- (void) marshal:(id<GSWriter>) writer {
+    [writer WriteByte :(UInt8)0];
+
+}
+- (void) unmarshal:(id<GSReader>) reader {
+
+    UInt8 __fields = [reader ReadByte];
+
+
+
+    for(int i = 0; i < (int)__fields; i ++) {
+        UInt8 tag = [reader ReadByte];
+
+        if (tag == GSTagSkip) {
+            continue;
+        }
+
+        [reader ReadSkip:tag];
+    }
+}
+
+
+
+- (NSError*) asNSError {
+    NSString *domain = @"GSRemoteException";
+
+    NSDictionary *userInfo = @{ @"source" : self };
+
+    NSError *error = [NSError errorWithDomain:domain code:-101 userInfo:userInfo];
+
+    return error;
+}
+
+
+@end
