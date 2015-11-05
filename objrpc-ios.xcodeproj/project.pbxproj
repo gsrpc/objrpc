@@ -10,6 +10,8 @@
 		B6CFA0B81BB51B6700C5F163 /* future.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CFA0B31BB51B6700C5F163 /* future.m */; settings = {ASSET_TAGS = (); }; };
 		B6CFA0B91BB51B6700C5F163 /* gsrpc.gs.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CFA0B51BB51B6700C5F163 /* gsrpc.gs.m */; settings = {ASSET_TAGS = (); }; };
 		B6CFA0BA1BB51B6700C5F163 /* stream.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CFA0B71BB51B6700C5F163 /* stream.m */; settings = {ASSET_TAGS = (); }; };
+		B6E1A1111BEB5365008417E5 /* tracer.gs.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E1A10F1BEB5365008417E5 /* tracer.gs.m */; settings = {ASSET_TAGS = (); }; };
+		B6E1A1121BEB5365008417E5 /* service.gs.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E1A1101BEB5365008417E5 /* service.gs.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +35,10 @@
 		B6CFA0B51BB51B6700C5F163 /* gsrpc.gs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gsrpc.gs.m; sourceTree = "<group>"; };
 		B6CFA0B61BB51B6700C5F163 /* stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stream.h; sourceTree = "<group>"; };
 		B6CFA0B71BB51B6700C5F163 /* stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stream.m; sourceTree = "<group>"; };
+		B6E1A10C1BEB5365008417E5 /* service.gs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = service.gs.h; sourceTree = "<group>"; };
+		B6E1A10E1BEB5365008417E5 /* tracer.gs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tracer.gs.h; sourceTree = "<group>"; };
+		B6E1A10F1BEB5365008417E5 /* tracer.gs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tracer.gs.m; sourceTree = "<group>"; };
+		B6E1A1101BEB5365008417E5 /* service.gs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = service.gs.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +80,9 @@
 		B6CFA0B01BB51B6700C5F163 /* gsrpc */ = {
 			isa = PBXGroup;
 			children = (
+				B6E1A10C1BEB5365008417E5 /* service.gs.h */,
+				B6E1A10D1BEB5365008417E5 /* trace */,
+				B6E1A1101BEB5365008417E5 /* service.gs.m */,
 				B6CFA0B11BB51B6700C5F163 /* channel.h */,
 				B6CFA0B21BB51B6700C5F163 /* future.h */,
 				B6CFA0B31BB51B6700C5F163 /* future.m */,
@@ -83,6 +92,15 @@
 				B6CFA0B71BB51B6700C5F163 /* stream.m */,
 			);
 			path = gsrpc;
+			sourceTree = "<group>";
+		};
+		B6E1A10D1BEB5365008417E5 /* trace */ = {
+			isa = PBXGroup;
+			children = (
+				B6E1A10E1BEB5365008417E5 /* tracer.gs.h */,
+				B6E1A10F1BEB5365008417E5 /* tracer.gs.m */,
+			);
+			path = trace;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,8 +160,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6CFA0B91BB51B6700C5F163 /* gsrpc.gs.m in Sources */,
+				B6E1A1121BEB5365008417E5 /* service.gs.m in Sources */,
 				B6CFA0BA1BB51B6700C5F163 /* stream.m in Sources */,
 				B6CFA0B81BB51B6700C5F163 /* future.m in Sources */,
+				B6E1A1111BEB5365008417E5 /* tracer.gs.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
