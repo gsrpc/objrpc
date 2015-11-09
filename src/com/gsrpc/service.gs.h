@@ -2,11 +2,11 @@
 #define COM_GSRPC_SERVICE_GS
 #import <com/gsrpc/stream.h>
 
+#import <com/gsrpc/channel.h>
+
 #import <com/gsrpc/gsrpc.gs.h>
 
 
-
-#import <com/gsrpc/channel.h>
 
 
 @class GSNamedService;

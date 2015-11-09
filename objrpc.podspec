@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "objrpc"
-  s.version      = "1.0.5"
+  s.version      = "1.0.6"
   s.summary      = "the gsrpc object-c injection runtimes"
 
   s.description  = <<-DESC

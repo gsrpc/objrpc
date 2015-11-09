@@ -104,7 +104,12 @@
         return;
     }
     
-    GSFuture *future = (GSFuture*)resolver(response,_block);
+    GSFuture *future = (GSFuture*)resolver(response,_block,&error);
+    
+    if (error != nil) {
+        [_finally catch:error];
+        return ;
+    }
     
     if(future != nil) {
         [future invokeWithPromise:_next withFinally:_finally];

@@ -35,7 +35,7 @@ typedef void (^GSErrorHandler)(NSError *error);
 
 @end
 
-typedef id<GSPromise> (^GSResolver)(GSResponse* response,id block);
+typedef id<GSPromise> (^GSResolver)(GSResponse* response,id block,NSError **error);
 
 
 #endif
